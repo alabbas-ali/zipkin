@@ -15,9 +15,9 @@
 # We copy files from the context into a scratch container first to avoid a problem where docker and
 # docker-compose don't share layer hashes https://github.com/docker/compose/issues/883 normally.
 # COPY --from= works around the issue.
-FROM scratch as scratch
-
-COPY . /code/
+#FROM scratch as scratch
+#
+#COPY . /code/
 
 #####
 # zipkin-builder - An image that caches build repositories (.m2, .npm) to speed up subsequent builds.
@@ -25,9 +25,9 @@ COPY . /code/
 
 FROM openzipkin/zipkin-builder as built
 
-COPY --from=scratch /code /code
-
-WORKDIR /code
+#COPY --from=scratch /code /code
+#
+#WORKDIR /code
 
 RUN mvn -B --no-transfer-progress package -DskipTests=true -pl zipkin-server -am
 
@@ -48,7 +48,7 @@ LABEL MAINTAINER Zipkin "https://zipkin.io/"
 
 ENV ZIPKIN_BASE_URL=http://zipkin:9411
 
-COPY --from=built /code/zipkin-lens/target/classes/zipkin-lens /var/www/html/zipkin
+COPY --from=built /zipkin-lens/target/classes/zipkin-lens /var/www/html/zipkin
 RUN mkdir -p /var/tmp/nginx && chown -R nginx:nginx /var/tmp/nginx
 
 # Setup services
