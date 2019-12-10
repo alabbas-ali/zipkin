@@ -1,1 +1,3 @@
 FROM openzipkin/zipkin-builder as built
+
+RUN mvn -B --no-transfer-progress package -DskipTests=true -pl zipkin-server -am
